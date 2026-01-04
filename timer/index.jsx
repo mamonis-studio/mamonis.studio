@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+const { useState, useEffect, useRef } = React;
 
 // スライムコンポーネント（目付き）
 const Slime = ({ x, y, size }) => {
@@ -1368,7 +1368,7 @@ const TimezoneModal = ({ onSelect, onClose }) => {
 };
 
 // メインアプリ
-export default function TimerApp() {
+function TimerApp() {
   const [theme, setTheme] = useState('');
   const [activeTab, setActiveTab] = useState('clock');
   const [timers, setTimers] = useState([
