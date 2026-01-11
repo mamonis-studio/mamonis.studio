@@ -1,0 +1,23 @@
+{
+  "name": "mamonis-admin-api",
+  "version": "1.0.0",
+  "description": "MAMONIS Admin Panel API - Cloudflare Workers",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create mamonis-cms",
+    "db:migrate": "wrangler d1 execute mamonis-cms --file=../schema.sql"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "cms",
+    "admin"
+  ],
+  "author": "MAMONIS",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

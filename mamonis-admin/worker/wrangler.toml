@@ -1,0 +1,22 @@
+name = "mamonis-admin-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "mamonis-cms"
+database_id = "YOUR_DATABASE_ID_HERE"
+
+# 環境変数（本番用）
+[vars]
+CORS_ORIGIN = "https://admin.mamonis.studio"
+JWT_SECRET = "your-secret-key-here"
+
+# Cloudflare Analytics API用（オプション）
+# CLOUDFLARE_API_TOKEN = "your-api-token"
+# CLOUDFLARE_ZONE_ID = "your-zone-id"
+
+# 開発環境
+[env.dev]
+vars = { CORS_ORIGIN = "http://localhost:3000" }
