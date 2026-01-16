@@ -1174,27 +1174,27 @@
         selected: 'selected'
       },
       ja: {
-        subtitle: 'ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ä¸è¦ã€‚ã‚µãƒ¼ãƒãƒ¼ä¸è¦ã€‚',
-        dropText: 'PDFã‚’è¿½åŠ ',
-        dropHint: 'ãƒ‰ãƒ­ãƒƒãƒ—ã¾ãŸã¯ã‚¯ãƒªãƒƒã‚¯',
-        addMore: '+ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿½åŠ ',
-        filesTitle: 'ãƒ•ã‚¡ã‚¤ãƒ«',
-        outputHeader: 'å‡ºåŠ›',
-        targetLabel: 'å¯¾è±¡',
-        targetAll: 'å…¨ã¦',
-        targetSelected: 'é¸æŠžã®ã¿',
-        methodLabel: 'æ–¹æ³•',
-        optMerge: 'çµåˆ',
-        optSplit: 'åˆ†å‰²',
-        optionLabel: 'ã‚ªãƒ—ã‚·ãƒ§ãƒ³',
-        optCompress: 'åœ§ç¸®',
-        processing: 'å‡¦ç†ä¸­',
-        clear: 'ã‚¯ãƒªã‚¢',
-        download: 'ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰',
+        subtitle: 'アップロード不要。サーバー不要。',
+        dropText: 'PDFを追加',
+        dropHint: 'ドロップまたはクリック',
+        addMore: '+ ファイルを追加',
+        filesTitle: 'ファイル',
+        outputHeader: '出力',
+        targetLabel: '対象',
+        targetAll: '全て',
+        targetSelected: '選択のみ',
+        methodLabel: '方法',
+        optMerge: '結合',
+        optSplit: '分割',
+        optionLabel: 'オプション',
+        optCompress: '圧縮',
+        processing: '処理中',
+        clear: 'クリア',
+        download: 'ダウンロード',
         pages: 'p',
-        totalPages: 'ãƒšãƒ¼ã‚¸',
-        selectAll: 'å…¨é¸æŠž',
-        selected: 'é¸æŠžä¸­'
+        totalPages: 'ページ',
+        selectAll: '全選択',
+        selected: '選択中'
       }
     };
 
@@ -1800,7 +1800,7 @@
         }
         
         if (pagesToExport.length === 0) {
-          alert(currentLang === 'ja' ? 'ãƒšãƒ¼ã‚¸ãŒé¸æŠžã•ã‚Œã¦ã„ã¾ã›ã‚“' : 'No pages selected');
+          alert(currentLang === 'ja' ? 'ページが選択されていません' : 'No pages selected');
           loadingEl.classList.remove('visible');
           actionsEl.classList.add('visible');
           return;
