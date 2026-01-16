@@ -1308,6 +1308,7 @@
             originalFileIndex: fileNum,
             originalPageNum: i,
             originalTotalPages: pageCount,
+            originalData: dataToStore,
             selected: false,
             thumbnail: null
           });
@@ -1672,7 +1673,7 @@
           for (const page of file.pages) {
             if (options.targetAll || (options.targetSelected && page.selected)) {
               pagesToExport.push({
-                data: file.data,
+                data: page.originalData,
                 pageNum: page.originalPageNum,
                 fileName: page.originalFile,
                 globalIndex: page.globalIndex
@@ -1699,12 +1700,18 @@
             const [copiedPage] = await newDoc.copyPages(srcDoc, [p.pageNum - 1]);
             newDoc.addPage(copiedPage);
             
-            const pdfBytes = await newDoc.save();
+            // 圧縮オプション
+            const saveOptions = options.compress ? { useObjectStreams: true } : {};
+            const pdfBytes = await newDoc.save(saveOptions);
             zip.file(`page_${String(i + 1).padStart(3, '0')}.pdf`, pdfBytes);
           }
           
           const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
-          const zipBlob = await zip.generateAsync({ type: 'blob' });
+          // ZIP圧縮レベルを設定
+          const zipOptions = options.compress 
+            ? { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 9 } }
+            : { type: 'blob' };
+          const zipBlob = await zip.generateAsync(zipOptions);
           const url = URL.createObjectURL(zipBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -1722,7 +1729,9 @@
             mergedPdf.addPage(copiedPage);
           }
           
-          const pdfBytes = await mergedPdf.save();
+          // 圧縮オプション
+          const saveOptions = options.compress ? { useObjectStreams: true } : {};
+          const pdfBytes = await mergedPdf.save(saveOptions);
           
           const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
           const blob = new Blob([pdfBytes], { type: 'application/pdf' });
