@@ -1474,8 +1474,12 @@
       // Initialize SortableJS
       initSortables();
       
-      // 番号の高さを同期
-      updateFileNumberHeights();
+      // 番号の高さを同期（DOM描画後に実行）
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          updateFileNumberHeights();
+        });
+      });
     }
 
     function updateFileNumberHeights() {
