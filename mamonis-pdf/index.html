@@ -1285,8 +1285,9 @@
         if (isImage) {
           // 画像をPDFに変換
           const pdfBytes = await imageToPdfData(file);
-          arrayBuffer = pdfBytes.buffer;
-          pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+          // Uint8ArrayをコピーしてArrayBufferとして保持
+          arrayBuffer = new Uint8Array(pdfBytes).buffer;
+          pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice() }).promise;
           pageCount = 1;
         } else {
           // PDFをそのまま処理
