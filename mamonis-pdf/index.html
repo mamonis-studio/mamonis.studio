@@ -690,8 +690,8 @@
     .page-drop-indicator {
       position: absolute;
       width: 2px;
-      top: 0;
-      bottom: 0;
+      top: 1rem;
+      bottom: 1rem;
       background: var(--indicator);
       pointer-events: none;
       opacity: 0;
@@ -1273,6 +1273,7 @@
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         const pageCount = pdfDoc.numPages;
+        const fileNum = pdfFiles.length + 1; // 追加時のファイル番号
         
         const pages = [];
         for (let i = 1; i <= pageCount; i++) {
@@ -1281,6 +1282,7 @@
             pageNum: i,
             globalIndex: globalPageIndex,
             originalFile: file.name,
+            originalFileIndex: fileNum,
             originalPageNum: i,
             originalTotalPages: pageCount,
             selected: false,
@@ -1325,6 +1327,12 @@
       filesList.innerHTML = '';
       updateFilesCount();
       
+      // 丸数字を生成する関数
+      const getCircledNumber = (n) => {
+        if (n <= 20) return String.fromCharCode(0x2460 + n - 1); // ①〜⑳
+        return `(${n})`; // 21以上は(21)形式
+      };
+      
       pdfFiles.forEach((file, fileIndex) => {
         const group = document.createElement('div');
         group.className = 'file-group';
@@ -1332,11 +1340,12 @@
         
         const selectedCount = getSelectedCount(file);
         const allSelected = selectedCount === file.pages.length && file.pages.length > 0;
+        const circledNum = getCircledNumber(fileIndex + 1);
         
         group.innerHTML = `
           <div class="file-header">
             <div class="file-info">
-              <span class="file-index">${String(fileIndex + 1).padStart(2, '0')}</span>
+              <span class="file-index">${circledNum}</span>
               <span class="file-name">${file.name}</span>
               <span class="file-meta">${file.pages.length}${i18n[currentLang].pages}</span>
             </div>
@@ -1403,6 +1412,8 @@
               ? page.originalFile.substring(0, 10) + '...' 
               : page.originalFile;
             
+            const origFileCircled = getCircledNumber(page.originalFileIndex);
+            
             thumb.innerHTML = `
               <div class="tooltip">${page.originalFile}</div>
               <div class="page-thumb-header">
@@ -1411,7 +1422,7 @@
               </div>
               <div class="page-canvas-wrap"></div>
               <div class="page-thumb-footer">
-                <div class="page-original-info">${page.originalPageNum}/${page.originalTotalPages}</div>
+                <div class="page-original-info">${origFileCircled}-${page.originalPageNum}/${page.originalTotalPages}</div>
               </div>
             `;
             
