@@ -1,15 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Tools</title>
+  
+  <!-- Primary Meta Tags -->
+  <title>PDF結合・分割ツール | 無料オンラインPDF編集 - Mamonis</title>
+  <meta name="title" content="PDF結合・分割ツール | 無料オンラインPDF編集 - Mamonis">
+  <meta name="description" content="完全無料のオンラインPDFツール。PDFの結合、分割、ページ並べ替えがブラウザだけで完結。アップロード不要でプライバシーも安心。画像からPDF変換も対応。">
+  <meta name="keywords" content="PDF結合,PDF分割,PDF編集,無料,オンライン,ブラウザ,PDFツール,PDF変換,画像PDF,ページ並べ替え">
+  <meta name="author" content="Mamonis Studio">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="Japanese">
+  <meta name="revisit-after" content="7 days">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mamonis.studio/pdf/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mamonis.studio/pdf/">
+  <meta property="og:title" content="PDF結合・分割ツール | 無料オンラインPDF編集 - Mamonis">
+  <meta property="og:description" content="完全無料のオンラインPDFツール。PDFの結合、分割、ページ並べ替えがブラウザだけで完結。アップロード不要でプライバシーも安心。">
+  <meta property="og:image" content="https://mamonis.studio/pdf/ogp.png">
+  <meta property="og:site_name" content="Mamonis Studio">
+  <meta property="og:locale" content="ja_JP">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://mamonis.studio/pdf/">
+  <meta name="twitter:title" content="PDF結合・分割ツール | 無料オンラインPDF編集 - Mamonis">
+  <meta name="twitter:description" content="完全無料のオンラインPDFツール。PDFの結合、分割、ページ並べ替えがブラウザだけで完結。アップロード不要でプライバシーも安心。">
+  <meta name="twitter:image" content="https://mamonis.studio/pdf/ogp.png">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PDF Tools">
+  <meta name="application-name" content="Mamonis PDF Tools">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+  <link rel="apple-touch-icon" href="https://mamonis.studio/pdf/icon-192.png">
+  
+  <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Scripts with defer for better loading -->
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script src="https://unpkg.com/sortablejs@1.15.0/Sortable.min.js"></script>
+  
+  <!-- Structured Data / JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mamonis PDF Tools",
+    "alternateName": ["PDF結合ツール", "PDF分割ツール", "PDFエディター"],
+    "description": "完全無料のオンラインPDFツール。PDFの結合、分割、ページ並べ替えがブラウザだけで完結。アップロード不要でプライバシーも安心。画像からPDF変換も対応。",
+    "url": "https://mamonis.studio/pdf/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "featureList": [
+      "PDF結合",
+      "PDF分割",
+      "ページ並べ替え",
+      "画像からPDF変換",
+      "ドラッグ&ドロップ対応",
+      "完全ブラウザ処理",
+      "プライバシー保護"
+    ],
+    "screenshot": "https://mamonis.studio/pdf/screenshot.png",
+    "softwareVersion": "1.0",
+    "author": {
+      "@type": "Organization",
+      "name": "Mamonis Studio",
+      "url": "https://mamonis.studio/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Mamonis Studio",
+      "url": "https://mamonis.studio/"
+    },
+    "inLanguage": ["ja", "en"],
+    "isAccessibleForFree": true
+  }
+  </script>
+  
+  <!-- FAQ Structured Data for rich snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "このPDFツールは無料ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、完全無料でご利用いただけます。登録も不要です。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "PDFファイルはサーバーにアップロードされますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "いいえ、すべての処理はブラウザ内で完結します。ファイルがサーバーに送信されることはありませんので、プライバシーは完全に保護されます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "画像をPDFに変換できますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、JPG、PNG、GIF、WebP形式の画像をドラッグ&ドロップするだけで、自動的にPDFに変換されます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "スマートフォンでも使えますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、スマートフォン、タブレット、PCなど、あらゆるデバイスのブラウザで動作します。"
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <!-- BreadcrumbList for navigation -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Mamonis Studio",
+        "item": "https://mamonis.studio/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "PDF Tools",
+        "item": "https://mamonis.studio/pdf/"
+      }
+    ]
+  }
+  </script>
+  
   <style>
     * {
       margin: 0;
@@ -930,7 +1087,22 @@
     /* Footer */
     footer {
       text-align: center;
-      padding: 4rem 2rem;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     footer a {
@@ -945,6 +1117,59 @@
 
     footer a:hover {
       color: var(--fg);
+    }
+
+    .footer-divider {
+      color: var(--border);
+      font-size: 0.5rem;
+    }
+
+    .footer-feature {
+      font-size: 0.5rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* Accessibility */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      background: var(--fg);
+      color: var(--bg);
+      padding: 0.75rem 1.5rem;
+      z-index: 9999;
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: top 0.3s ease;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Focus styles for accessibility */
+    :focus-visible {
+      outline: 2px solid var(--fg);
+      outline-offset: 2px;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--fg);
+      outline-offset: 2px;
     }
 
     /* Responsive - Tablet */
@@ -1185,6 +1410,19 @@
         font-size: 0.65rem;
       }
 
+      footer {
+        padding: 2rem 1rem;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .footer-divider {
+        display: none;
+      }
+
       /* タッチデバイス用 */
       .file-header {
         cursor: default;
@@ -1266,47 +1504,66 @@
   </style>
 </head>
 <body data-theme="light">
-  <header>
-    <div class="header-left">
-      <button class="header-btn" id="lang-toggle">JP</button>
-      <button class="header-btn" id="theme-toggle">Dark</button>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
+  
+  <!-- Noscript fallback -->
+  <noscript>
+    <div style="padding: 2rem; text-align: center; background: #fee; color: #c00;">
+      <h2>JavaScriptを有効にしてください</h2>
+      <p>このPDFツールを使用するにはJavaScriptが必要です。ブラウザの設定でJavaScriptを有効にしてください。</p>
     </div>
-    <a href="https://mamonis.studio/" class="logo">Mamonis</a>
+  </noscript>
+
+  <header role="banner">
+    <nav class="header-left" aria-label="サイト設定">
+      <button class="header-btn" id="lang-toggle" aria-label="言語を切り替え">JP</button>
+      <button class="header-btn" id="theme-toggle" aria-label="テーマを切り替え">Dark</button>
+    </nav>
+    <a href="https://mamonis.studio/" class="logo" aria-label="Mamonis Studio ホームへ">Mamonis</a>
   </header>
 
-  <main>
-    <div class="hero">
+  <main id="main-content" role="main">
+    <article class="hero" itemscope itemtype="https://schema.org/WebApplication">
+      <meta itemprop="name" content="Mamonis PDF Tools">
+      <meta itemprop="applicationCategory" content="UtilitiesApplication">
       <div class="hero-label">Browser-based Tool</div>
-      <h1>
+      <h1 itemprop="headline">
         PDF Tools
         <span data-i18n="subtitle">No upload. No server. Just works.</span>
       </h1>
-    </div>
+      <p class="visually-hidden" itemprop="description">
+        完全無料のオンラインPDFツール。PDFの結合、分割、ページ並べ替えがブラウザだけで完結。
+        アップロード不要でプライバシーも安心。画像からPDF変換も対応。
+      </p>
+    </article>
 
-    <div class="drop-zone" id="drop-zone">
-      <div class="drop-zone-icon">+</div>
-      <div class="drop-zone-text" data-i18n="dropText">Add PDF or Images</div>
-      <div class="drop-zone-hint" data-i18n="dropHint">Drop here or click to browse</div>
-    </div>
-    <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp" multiple>
+    <section aria-label="ファイルアップロード">
+      <div class="drop-zone" id="drop-zone" role="button" tabindex="0" aria-label="PDFまたは画像ファイルをドロップするか、クリックして選択">
+        <div class="drop-zone-icon" aria-hidden="true">+</div>
+        <div class="drop-zone-text" data-i18n="dropText">Add PDF or Images</div>
+        <div class="drop-zone-hint" data-i18n="dropHint">Drop here or click to browse</div>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp" multiple aria-label="ファイルを選択">
+    </section>
 
-    <div class="files-container" id="files-container">
+    <section class="files-container" id="files-container" aria-label="アップロードされたファイル">
       <div class="files-header">
-        <span class="files-title" data-i18n="filesTitle">Files</span>
-        <span class="files-count" id="files-count"></span>
+        <h2 class="files-title" data-i18n="filesTitle">Files</h2>
+        <span class="files-count" id="files-count" aria-live="polite"></span>
       </div>
       <div class="files-list-wrapper">
-        <div class="file-numbers" id="file-numbers"></div>
-        <div id="files-list"></div>
+        <div class="file-numbers" id="file-numbers" aria-hidden="true"></div>
+        <div id="files-list" role="list"></div>
       </div>
       
-      <div class="drop-zone-mini" id="drop-zone-mini">
+      <div class="drop-zone-mini" id="drop-zone-mini" role="button" tabindex="0" aria-label="追加のファイルをアップロード">
         <span class="drop-zone-mini-text" data-i18n="addMore">+ Add more files</span>
       </div>
-    </div>
+    </section>
 
-    <div class="options" id="options">
-      <div class="options-header" data-i18n="outputHeader">Output</div>
+    <section class="options" id="options" aria-label="出力オプション">
+      <h2 class="options-header" data-i18n="outputHeader">Output</h2>
       <div class="options-body">
         <div class="options-group">
           <span class="options-group-label" data-i18n="targetLabel">Target</span>
@@ -1363,8 +1620,18 @@
     </div>
   </main>
 
-  <footer>
-    <a href="https://mamonis.studio/">© 2026 Mamonis</a>
+  <footer role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://mamonis.studio/">© 2026 Mamonis Studio</a>
+        <span class="footer-divider">·</span>
+        <span class="footer-feature">完全無料</span>
+        <span class="footer-divider">·</span>
+        <span class="footer-feature">サーバー送信なし</span>
+        <span class="footer-divider">·</span>
+        <span class="footer-feature">プライバシー保護</span>
+      </div>
+    </div>
   </footer>
 
   <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -1464,6 +1731,13 @@
     // Drop zones
     [dropZone, dropZoneMini].forEach(zone => {
       zone.addEventListener('click', () => fileInput.click());
+      // キーボードアクセシビリティ
+      zone.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          fileInput.click();
+        }
+      });
       zone.addEventListener('dragover', (e) => {
         e.preventDefault();
         zone.classList.add('drag-over');
@@ -1472,7 +1746,10 @@
       zone.addEventListener('drop', async (e) => {
         e.preventDefault();
         zone.classList.remove('drag-over');
-        const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+        // PDFと画像を受け付ける
+        const files = Array.from(e.dataTransfer.files).filter(f => 
+          f.type === 'application/pdf' || f.type.startsWith('image/')
+        );
         if (files.length) await addFiles(files);
       });
     });
