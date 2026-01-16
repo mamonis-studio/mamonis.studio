@@ -1821,11 +1821,12 @@
             zip.file(`page_${String(i + 1).padStart(3, '0')}.pdf`, pdfBytes);
           }
           
+          const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
           const zipBlob = await zip.generateAsync({ type: 'blob' });
           const url = URL.createObjectURL(zipBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'pages.zip';
+          a.download = `mamonis_pdf_${timestamp}.zip`;
           a.click();
           URL.revokeObjectURL(url);
           
@@ -1841,11 +1842,12 @@
           
           const pdfBytes = await mergedPdf.save();
           
+          const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
           const blob = new Blob([pdfBytes], { type: 'application/pdf' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'output.pdf';
+          a.download = `mamonis_pdf_${timestamp}.pdf`;
           a.click();
           URL.revokeObjectURL(url);
         }
