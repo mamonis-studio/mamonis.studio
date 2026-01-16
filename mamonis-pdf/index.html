@@ -461,16 +461,16 @@
     .select-all-btn {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       background: none;
       border: 1px solid var(--border);
-      padding: 0.35rem 0.6rem;
+      padding: 0.4rem 0.7rem;
       font-size: 0.6rem;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
       font-family: inherit;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .select-all-btn:hover {
@@ -479,19 +479,36 @@
     }
 
     .select-all-btn .checkbox {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       border: 1.5px solid currentColor;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.5rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .select-all-btn .checkbox .inner {
+      width: 0;
+      height: 0;
+      background: var(--bg);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .select-all-btn.checked {
+      border-color: var(--fg);
+      color: var(--fg);
     }
 
     .select-all-btn.checked .checkbox {
       background: var(--fg);
       border-color: var(--fg);
-      color: var(--bg);
+    }
+
+    .select-all-btn.checked .checkbox .inner {
+      width: 5px;
+      height: 5px;
+      background: var(--bg);
     }
 
     .selection-count {
@@ -558,17 +575,23 @@
     }
 
     .page-checkbox {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border: 1.5px solid var(--border);
       background: var(--surface);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.5rem;
-      font-weight: 700;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .page-checkbox .inner {
+      width: 0;
+      height: 0;
+      background: var(--bg);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .page-checkbox:hover {
@@ -578,7 +601,12 @@
     .page-thumb.selected .page-checkbox {
       background: var(--fg);
       border-color: var(--fg);
-      color: var(--bg);
+    }
+
+    .page-thumb.selected .page-checkbox .inner {
+      width: 6px;
+      height: 6px;
+      background: var(--bg);
     }
 
     .page-global-num {
@@ -752,36 +780,63 @@
 
     .option-radio,
     .option-checkbox {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border: 1.5px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
-      font-size: 0.5rem;
-      font-weight: 700;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      flex-shrink: 0;
     }
 
     .option-radio {
       border-radius: 50%;
     }
 
+    .option-radio .inner,
+    .option-checkbox .inner {
+      width: 0;
+      height: 0;
+      background: var(--bg);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .option-radio .inner {
+      border-radius: 50%;
+    }
+
+    .option-item:hover .option-radio,
+    .option-item:hover .option-checkbox {
+      border-color: var(--fg);
+    }
+
     .option-radio.checked,
     .option-checkbox.checked {
       background: var(--fg);
       border-color: var(--fg);
-      color: var(--bg);
+    }
+
+    .option-radio.checked .inner,
+    .option-checkbox.checked .inner {
+      width: 6px;
+      height: 6px;
+      background: var(--bg);
     }
 
     .option-label {
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       font-weight: 500;
       color: var(--muted);
       transition: color 0.2s ease;
     }
 
     .option-item:hover .option-label {
+      color: var(--fg);
+    }
+
+    .option-item.active .option-label {
       color: var(--fg);
     }
 
@@ -1034,12 +1089,12 @@
         <div class="options-group">
           <span class="options-group-label" data-i18n="targetLabel">Target</span>
           <div class="options-group-items">
-            <div class="option-item" data-option="targetAll" data-group="target">
-              <div class="option-radio checked">●</div>
+            <div class="option-item active" data-option="targetAll" data-group="target">
+              <div class="option-radio checked"><div class="inner"></div></div>
               <span class="option-label" data-i18n="targetAll">All</span>
             </div>
             <div class="option-item" data-option="targetSelected" data-group="target">
-              <div class="option-radio"></div>
+              <div class="option-radio"><div class="inner"></div></div>
               <span class="option-label" data-i18n="targetSelected">Selected</span>
             </div>
           </div>
@@ -1050,12 +1105,12 @@
         <div class="options-group">
           <span class="options-group-label" data-i18n="methodLabel">Method</span>
           <div class="options-group-items">
-            <div class="option-item" data-option="merge" data-group="method">
-              <div class="option-radio checked">●</div>
+            <div class="option-item active" data-option="merge" data-group="method">
+              <div class="option-radio checked"><div class="inner"></div></div>
               <span class="option-label" data-i18n="optMerge">Merge</span>
             </div>
             <div class="option-item" data-option="split" data-group="method">
-              <div class="option-radio"></div>
+              <div class="option-radio"><div class="inner"></div></div>
               <span class="option-label" data-i18n="optSplit">Split</span>
             </div>
           </div>
@@ -1067,7 +1122,7 @@
           <span class="options-group-label" data-i18n="optionLabel">Option</span>
           <div class="options-group-items">
             <div class="option-item" data-option="compress" data-group="option">
-              <div class="option-checkbox"></div>
+              <div class="option-checkbox"><div class="inner"></div></div>
               <span class="option-label" data-i18n="optCompress">Compress</span>
             </div>
           </div>
@@ -1087,7 +1142,7 @@
   </main>
 
   <footer>
-    <a href="https://mamonis.studio/">© 2026 Mamonis</a>
+    <a href="https://mamonis.studio/">Â© 2026 Mamonis</a>
   </footer>
 
   <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -1119,27 +1174,27 @@
         selected: 'selected'
       },
       ja: {
-        subtitle: 'アップロード不要。サーバー不要。',
-        dropText: 'PDFを追加',
-        dropHint: 'ドロップまたはクリック',
-        addMore: '+ ファイルを追加',
-        filesTitle: 'ファイル',
-        outputHeader: '出力',
-        targetLabel: '対象',
-        targetAll: '全て',
-        targetSelected: '選択のみ',
-        methodLabel: '方法',
-        optMerge: '結合',
-        optSplit: '分割',
-        optionLabel: 'オプション',
-        optCompress: '圧縮',
-        processing: '処理中',
-        clear: 'クリア',
-        download: 'ダウンロード',
+        subtitle: 'ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ä¸è¦ã€‚ã‚µãƒ¼ãƒãƒ¼ä¸è¦ã€‚',
+        dropText: 'PDFã‚’è¿½åŠ ',
+        dropHint: 'ãƒ‰ãƒ­ãƒƒãƒ—ã¾ãŸã¯ã‚¯ãƒªãƒƒã‚¯',
+        addMore: '+ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿½åŠ ',
+        filesTitle: 'ãƒ•ã‚¡ã‚¤ãƒ«',
+        outputHeader: 'å‡ºåŠ›',
+        targetLabel: 'å¯¾è±¡',
+        targetAll: 'å…¨ã¦',
+        targetSelected: 'é¸æŠžã®ã¿',
+        methodLabel: 'æ–¹æ³•',
+        optMerge: 'çµåˆ',
+        optSplit: 'åˆ†å‰²',
+        optionLabel: 'ã‚ªãƒ—ã‚·ãƒ§ãƒ³',
+        optCompress: 'åœ§ç¸®',
+        processing: 'å‡¦ç†ä¸­',
+        clear: 'ã‚¯ãƒªã‚¢',
+        download: 'ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰',
         pages: 'p',
-        totalPages: 'ページ',
-        selectAll: '全選択',
-        selected: '選択中'
+        totalPages: 'ãƒšãƒ¼ã‚¸',
+        selectAll: 'å…¨é¸æŠž',
+        selected: 'é¸æŠžä¸­'
       }
     };
 
@@ -1252,7 +1307,7 @@
       const totalPages = pdfFiles.reduce((sum, f) => sum + f.pages.length, 0);
       const countEl = document.getElementById('files-count');
       if (pdfFiles.length > 0) {
-        countEl.textContent = `${pdfFiles.length} files · ${totalPages} ${i18n[currentLang].totalPages}`;
+        countEl.textContent = `${pdfFiles.length} files Â· ${totalPages} ${i18n[currentLang].totalPages}`;
       } else {
         countEl.textContent = '';
       }
@@ -1286,15 +1341,15 @@
               <span class="file-meta">${file.pages.length}${i18n[currentLang].pages}</span>
             </div>
             <div class="file-actions">
-              <button class="icon-btn expand-btn">${file.expanded ? '↑' : '↓'}</button>
-              <button class="icon-btn remove-btn">×</button>
+              <button class="icon-btn expand-btn">${file.expanded ? 'â†‘' : 'â†“'}</button>
+              <button class="icon-btn remove-btn">Ã—</button>
             </div>
           </div>
           <div class="pages-container ${file.expanded ? 'expanded' : ''}">
             <div class="pages-toolbar">
               <div class="pages-toolbar-left">
                 <button class="select-all-btn ${allSelected ? 'checked' : ''}" data-file-index="${fileIndex}">
-                  <span class="checkbox">${allSelected ? '✓' : ''}</span>
+                  <span class="checkbox"><span class="inner"></span></span>
                   <span>${i18n[currentLang].selectAll}</span>
                 </button>
                 <span class="selection-count ${selectedCount > 0 ? 'has-selection' : ''}">${selectedCount}/${file.pages.length} ${i18n[currentLang].selected}</span>
@@ -1351,7 +1406,7 @@
             thumb.innerHTML = `
               <div class="tooltip">${page.originalFile}</div>
               <div class="page-thumb-header">
-                <div class="page-checkbox">${page.selected ? '✓' : ''}</div>
+                <div class="page-checkbox"><div class="inner"></div></div>
                 <span class="page-global-num">#${page.globalIndex}</span>
               </div>
               <div class="page-canvas-wrap"></div>
@@ -1688,7 +1743,7 @@
             const radio = i.querySelector('.option-radio');
             const isChecked = options[opt];
             radio.classList.toggle('checked', isChecked);
-            radio.textContent = isChecked ? '●' : '';
+            i.classList.toggle('active', isChecked);
           });
         } else if (group === 'method') {
           // Radio style
@@ -1700,14 +1755,14 @@
             const radio = i.querySelector('.option-radio');
             const isChecked = options[opt];
             radio.classList.toggle('checked', isChecked);
-            radio.textContent = isChecked ? '●' : '';
+            i.classList.toggle('active', isChecked);
           });
         } else if (group === 'option') {
           // Checkbox style
           options[option] = !options[option];
           const checkbox = item.querySelector('.option-checkbox');
           checkbox.classList.toggle('checked');
-          checkbox.textContent = options[option] ? '✓' : '';
+          item.classList.toggle('active', options[option]);
         }
       });
     });
@@ -1745,7 +1800,7 @@
         }
         
         if (pagesToExport.length === 0) {
-          alert(currentLang === 'ja' ? 'ページが選択されていません' : 'No pages selected');
+          alert(currentLang === 'ja' ? 'ãƒšãƒ¼ã‚¸ãŒé¸æŠžã•ã‚Œã¦ã„ã¾ã›ã‚“' : 'No pages selected');
           loadingEl.classList.remove('visible');
           actionsEl.classList.add('visible');
           return;
