@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f8f8f8;
+      --fg: #0a0a0a;
+      --border: #e0e0e0;
+      --hover: #eeeeee;
+      --muted: #999999;
+      --surface: #ffffff;
+      --indicator: #0a0a0a;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0a0a0a;
+      --fg: #f0f0f0;
+      --border: #1f1f1f;
+      --hover: #151515;
+      --muted: #555555;
+      --surface: #111111;
+      --indicator: #f0f0f0;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2rem;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-left {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .header-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 0.5rem 0.75rem;
+      font-size: 0.65rem;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.08em;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .header-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0.25rem;
+      left: 0.75rem;
+      right: 0.75rem;
+      height: 1px;
+      background: var(--fg);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .header-btn:hover {
+      color: var(--fg);
+    }
+
+    .header-btn:hover::after {
+      transform: scaleX(1);
+    }
+
+    .logo {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      color: var(--fg);
+      text-transform: uppercase;
+    }
+
+    main {
+      padding: 7rem 2rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    h1 span {
+      display: block;
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.4em;
+      letter-spacing: 0;
+      margin-top: 0.5rem;
+    }
+
+    /* Drop Zone - Initial */
+    .drop-zone {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 1.5rem;
+    }
+
+    .drop-zone.hidden {
+      display: none;
+    }
+
+    .drop-zone::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border: 1px solid var(--fg);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .drop-zone:hover::before,
+    .drop-zone.drag-over::before {
+      opacity: 1;
+    }
+
+    .drop-zone-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 1.5rem;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--muted);
+    }
+
+    .drop-zone:hover .drop-zone-icon {
+      border-color: var(--fg);
+      color: var(--fg);
+      transform: translateY(-4px);
+    }
+
+    .drop-zone-text {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .drop-zone-hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    /* Mini Drop Zone */
+    .drop-zone-mini {
+      display: none;
+      border: 1px dashed var(--border);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+      background: var(--surface);
+    }
+
+    .drop-zone-mini.visible {
+      display: block;
+    }
+
+    .drop-zone-mini:hover,
+    .drop-zone-mini.drag-over {
+      border-color: var(--fg);
+      border-style: solid;
+    }
+
+    .drop-zone-mini-text {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .drop-zone-mini:hover .drop-zone-mini-text {
+      color: var(--fg);
+    }
+
+    /* Files List */
+    .files-container {
+      display: none;
+    }
+
+    .files-container.has-files {
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+
+    .files-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding: 0 0.25rem;
+    }
+
+    .files-title {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .files-count {
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #files-list {
+      position: relative;
+    }
+
+    .file-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-bottom: 0.375rem;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                  opacity 0.3s ease,
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
+      position: relative;
+    }
+
+    .file-group:hover {
+      border-color: var(--muted);
+    }
+
+    .file-group.dragging {
+      opacity: 0.9;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      z-index: 100;
+      border-color: var(--fg);
+    }
+
+    .file-group.drag-ghost {
+      opacity: 0.3;
+    }
+
+    .file-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.875rem 1rem;
+      cursor: grab;
+      user-select: none;
+      gap: 1rem;
+    }
+
+    .file-header:active {
+      cursor: grabbing;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .file-index {
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--muted);
+      width: 1.5rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .file-name {
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .file-meta {
+      font-size: 0.6rem;
+      color: var(--muted);
+      white-space: nowrap;
+      padding: 0.25rem 0.5rem;
+      background: var(--hover);
+    }
+
+    .file-actions {
+      display: flex;
+      gap: 0.125rem;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      width: 1.75rem;
+      height: 1.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:hover {
+      color: var(--fg);
+      background: var(--hover);
+    }
+
+    /* Drop Indicator */
+    .drop-indicator {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--indicator);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+    }
+
+    .drop-indicator.visible {
+      opacity: 1;
+    }
+
+    .drop-indicator::before,
+    .drop-indicator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 6px;
+      background: var(--indicator);
+      border-radius: 50%;
+    }
+
+    .drop-indicator::before {
+      left: -3px;
+    }
+
+    .drop-indicator::after {
+      right: -3px;
+    }
+
+    /* Pages Grid */
+    .pages-container {
+      display: none;
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .pages-container.expanded {
+      display: block;
+    }
+
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .page-thumb {
+      position: relative;
+      aspect-ratio: 3/4;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: grab;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.2s ease,
+                  box-shadow 0.25s ease,
+                  opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .page-thumb:hover {
+      border-color: var(--fg);
+    }
+
+    .page-thumb.dragging {
+      opacity: 0.9;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      z-index: 100;
+      border-color: var(--fg);
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .page-thumb.drag-ghost {
+      opacity: 0.3;
+    }
+
+    .page-thumb canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .page-number {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 0.5rem;
+      font-weight: 600;
+      padding: 0.2rem 0;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .page-thumb.selected {
+      border-color: var(--fg);
+      border-width: 2px;
+    }
+
+    /* Page Drop Indicator */
+    .page-drop-indicator {
+      position: absolute;
+      width: 2px;
+      top: 0;
+      bottom: 0;
+      background: var(--indicator);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 50;
+    }
+
+    .page-drop-indicator.visible {
+      opacity: 1;
+    }
+
+    .page-drop-indicator::before,
+    .page-drop-indicator::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: var(--indicator);
+      border-radius: 50%;
+    }
+
+    .page-drop-indicator::before {
+      top: -3px;
+    }
+
+    .page-drop-indicator::after {
+      bottom: -3px;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--fg);
+      color: var(--bg);
+      padding: 0.4rem 0.6rem;
+      font-size: 0.55rem;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: var(--fg);
+    }
+
+    .page-thumb:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .page-thumb.dragging .tooltip {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Options */
+    .options {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .options.visible {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .options-label {
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .options-divider {
+      width: 1px;
+      height: 1rem;
+      background: var(--border);
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 0.25rem 0;
+    }
+
+    .option-checkbox {
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      font-size: 0.5rem;
+      font-weight: 700;
+    }
+
+    .option-checkbox.checked {
+      background: var(--fg);
+      border-color: var(--fg);
+      color: var(--bg);
+    }
+
+    .option-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .option-item:hover .option-label {
+      color: var(--fg);
+    }
+
+    /* Actions */
+    .actions {
+      display: none;
+      gap: 0.5rem;
+    }
+
+    .actions.visible {
+      display: flex;
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: 1rem 2rem;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-primary:hover::before {
+      transform: translateY(0);
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+      transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-primary:hover span {
+      color: var(--fg);
+    }
+
+    .btn-primary:hover {
+      border: 1px solid var(--fg);
+    }
+
+    .btn-secondary {
+      padding: 1rem 1.25rem;
+      background: none;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      text-transform: uppercase;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+    }
+
+    /* Loading */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 1.5px solid var(--border);
+      border-top-color: var(--fg);
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    footer a {
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--fg);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header {
+        padding: 1rem 1.25rem;
+      }
+
+      main {
+        padding: 5.5rem 1.25rem 2rem;
+      }
+
+      .drop-zone {
+        padding: 3rem 1.5rem;
+      }
+
+      .options.visible {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .options-divider {
+        display: none;
+      }
+
+      .pages-grid {
+        grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      }
+    }
+
+    ::selection {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    /* Drag overlay for smooth dragging */
+    .drag-overlay {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      transition: none;
+    }
+
+    .drag-overlay.file {
+      background: var(--surface);
+      border: 1px solid var(--fg);
+      padding: 0.875rem 1rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .drag-overlay.page {
+      border: 1px solid var(--fg);
+      background: var(--surface);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <header>
+    <div class="header-left">
+      <button class="header-btn" id="lang-toggle">JP</button>
+      <button class="header-btn" id="theme-toggle">Dark</button>
+    </div>
+    <a href="https://mamonis.studio/" class="logo">Mamonis</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="hero-label">Browser-based Tool</div>
+      <h1>
+        PDF Tools
+        <span data-i18n="subtitle">No upload. No server. Just works.</span>
+      </h1>
+    </div>
+
+    <div class="drop-zone" id="drop-zone">
+      <div class="drop-zone-icon">+</div>
+      <div class="drop-zone-text" data-i18n="dropText">Add PDF files</div>
+      <div class="drop-zone-hint" data-i18n="dropHint">Drop here or click to browse</div>
+    </div>
+    <input type="file" id="file-input" accept=".pdf" multiple>
+
+    <div class="files-container" id="files-container">
+      <div class="files-header">
+        <span class="files-title" data-i18n="filesTitle">Files</span>
+        <span class="files-count" id="files-count"></span>
+      </div>
+      <div id="files-list"></div>
+      <div class="drop-indicator" id="file-drop-indicator"></div>
+      
+      <div class="drop-zone-mini" id="drop-zone-mini">
+        <span class="drop-zone-mini-text" data-i18n="addMore">+ Add more files</span>
+      </div>
+    </div>
+
+    <div class="options" id="options">
+      <span class="options-label" data-i18n="optionsLabel">Options</span>
+      <div class="options-divider"></div>
+      <div class="option-item" data-option="merge">
+        <div class="option-checkbox checked">✓</div>
+        <span class="option-label" data-i18n="optMerge">Merge</span>
+      </div>
+      <div class="option-item" data-option="selected">
+        <div class="option-checkbox"></div>
+        <span class="option-label" data-i18n="optSelected">Selected only</span>
+      </div>
+      <div class="option-item" data-option="compress">
+        <div class="option-checkbox"></div>
+        <span class="option-label" data-i18n="optCompress">Compress</span>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div class="loading-text" data-i18n="processing">Processing</div>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="btn-secondary" id="btn-clear" data-i18n="clear">Clear</button>
+      <button class="btn-primary" id="btn-download"><span data-i18n="download">Download</span></button>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://mamonis.studio/">© 2026 Mamonis</a>
+  </footer>
+
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+    const i18n = {
+      en: {
+        subtitle: 'No upload. No server. Just works.',
+        dropText: 'Add PDF files',
+        dropHint: 'Drop here or click to browse',
+        addMore: '+ Add more files',
+        filesTitle: 'Files',
+        optionsLabel: 'Options',
+        optMerge: 'Merge',
+        optSelected: 'Selected only',
+        optCompress: 'Compress',
+        processing: 'Processing',
+        clear: 'Clear',
+        download: 'Download',
+        pages: 'p',
+        totalPages: 'pages total'
+      },
+      ja: {
+        subtitle: 'アップロード不要。サーバー不要。',
+        dropText: 'PDFを追加',
+        dropHint: 'ドロップまたはクリック',
+        addMore: '+ ファイルを追加',
+        filesTitle: 'ファイル',
+        optionsLabel: 'オプション',
+        optMerge: '結合',
+        optSelected: '選択のみ',
+        optCompress: '圧縮',
+        processing: '処理中',
+        clear: 'クリア',
+        download: 'ダウンロード',
+        pages: 'p',
+        totalPages: 'ページ'
+      }
+    };
+
+    let currentLang = navigator.language.startsWith('ja') ? 'ja' : 'en';
+    let pdfFiles = [];
+    let globalPageIndex = 0;
+    const options = { merge: true, selected: false, compress: false };
+
+    // Drag state
+    let dragState = {
+      type: null, // 'file' or 'page'
+      sourceFileIndex: null,
+      sourcePageIndex: null,
+      overlay: null,
+      startX: 0,
+      startY: 0
+    };
+
+    const dropZone = document.getElementById('drop-zone');
+    const dropZoneMini = document.getElementById('drop-zone-mini');
+    const fileInput = document.getElementById('file-input');
+    const filesContainer = document.getElementById('files-container');
+    const filesList = document.getElementById('files-list');
+    const fileDropIndicator = document.getElementById('file-drop-indicator');
+    const optionsEl = document.getElementById('options');
+    const actionsEl = document.getElementById('actions');
+    const loadingEl = document.getElementById('loading');
+
+    function updateLanguage() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[currentLang][key]) {
+          el.textContent = i18n[currentLang][key];
+        }
+      });
+      document.getElementById('lang-toggle').textContent = currentLang === 'en' ? 'JP' : 'EN';
+      updateFilesCount();
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      const isDark = document.body.dataset.theme === 'dark';
+      document.body.dataset.theme = isDark ? 'light' : 'dark';
+      this.textContent = isDark ? 'Dark' : 'Light';
+    });
+
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'ja' : 'en';
+      updateLanguage();
+      renderFiles();
+    });
+
+    // Drop zones
+    [dropZone, dropZoneMini].forEach(zone => {
+      zone.addEventListener('click', () => fileInput.click());
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+      zone.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+        if (files.length) await addFiles(files);
+      });
+    });
+
+    fileInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length) await addFiles(files);
+      fileInput.value = '';
+    });
+
+    async function addFiles(files) {
+      loadingEl.classList.add('visible');
+      
+      for (const file of files) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const pageCount = pdfDoc.numPages;
+        
+        const pages = [];
+        for (let i = 1; i <= pageCount; i++) {
+          globalPageIndex++;
+          pages.push({
+            pageNum: i,
+            globalIndex: globalPageIndex,
+            originalFile: file.name,
+            originalPageNum: i,
+            originalTotalPages: pageCount,
+            selected: false,
+            thumbnail: null
+          });
+        }
+        
+        pdfFiles.push({
+          id: Date.now() + Math.random(),
+          name: file.name,
+          data: arrayBuffer,
+          pdfDoc,
+          pages,
+          expanded: false
+        });
+      }
+      
+      renderFiles();
+      updateUI();
+      loadingEl.classList.remove('visible');
+    }
+
+    function updateFilesCount() {
+      const totalPages = pdfFiles.reduce((sum, f) => sum + f.pages.length, 0);
+      const countEl = document.getElementById('files-count');
+      if (pdfFiles.length > 0) {
+        countEl.textContent = `${pdfFiles.length} files · ${totalPages} ${i18n[currentLang].totalPages}`;
+      } else {
+        countEl.textContent = '';
+      }
+    }
+
+    function renderFiles() {
+      filesList.innerHTML = '';
+      updateFilesCount();
+      
+      pdfFiles.forEach((file, fileIndex) => {
+        const group = document.createElement('div');
+        group.className = 'file-group';
+        group.dataset.fileIndex = fileIndex;
+        
+        group.innerHTML = `
+          <div class="file-header">
+            <div class="file-info">
+              <span class="file-index">${String(fileIndex + 1).padStart(2, '0')}</span>
+              <span class="file-name">${file.name}</span>
+              <span class="file-meta">${file.pages.length}${i18n[currentLang].pages}</span>
+            </div>
+            <div class="file-actions">
+              <button class="icon-btn expand-btn">${file.expanded ? '−' : '+'}</button>
+              <button class="icon-btn remove-btn">×</button>
+            </div>
+          </div>
+          <div class="pages-container ${file.expanded ? 'expanded' : ''}">
+            <div class="pages-grid" data-file-index="${fileIndex}"></div>
+          </div>
+        `;
+        
+        // File drag
+        const header = group.querySelector('.file-header');
+        header.addEventListener('mousedown', (e) => {
+          if (e.target.closest('.icon-btn')) return;
+          startFileDrag(e, fileIndex, group);
+        });
+        
+        group.querySelector('.expand-btn').addEventListener('click', async () => {
+          file.expanded = !file.expanded;
+          if (file.expanded) await generateThumbnails(file);
+          renderFiles();
+        });
+        
+        group.querySelector('.remove-btn').addEventListener('click', () => {
+          pdfFiles = pdfFiles.filter(f => f.id !== file.id);
+          recalculateGlobalIndex();
+          renderFiles();
+          updateUI();
+        });
+        
+        // Pages
+        if (file.expanded) {
+          const pagesGrid = group.querySelector('.pages-grid');
+          file.pages.forEach((page, pageIndex) => {
+            const thumb = document.createElement('div');
+            thumb.className = `page-thumb ${page.selected ? 'selected' : ''}`;
+            thumb.dataset.fileIndex = fileIndex;
+            thumb.dataset.pageIndex = pageIndex;
+            
+            thumb.innerHTML = `
+              <div class="tooltip">${page.originalFile} (${page.originalPageNum}/${page.originalTotalPages})</div>
+              <span class="page-number">${page.globalIndex}</span>
+            `;
+            
+            if (page.thumbnail) {
+              const canvas = page.thumbnail.cloneNode();
+              canvas.getContext('2d').drawImage(page.thumbnail, 0, 0);
+              thumb.insertBefore(canvas, thumb.firstChild);
+            }
+            
+            // Page drag
+            thumb.addEventListener('mousedown', (e) => {
+              e.stopPropagation();
+              startPageDrag(e, fileIndex, pageIndex, thumb);
+            });
+            
+            pagesGrid.appendChild(thumb);
+          });
+        }
+        
+        filesList.appendChild(group);
+      });
+    }
+
+    // ========== DRAG SYSTEM ==========
+    
+    function startFileDrag(e, fileIndex, element) {
+      e.preventDefault();
+      
+      const rect = element.getBoundingClientRect();
+      
+      dragState = {
+        type: 'file',
+        sourceFileIndex: fileIndex,
+        sourcePageIndex: null,
+        startX: e.clientX,
+        startY: e.clientY,
+        offsetX: e.clientX - rect.left,
+        offsetY: e.clientY - rect.top,
+        element: element,
+        overlay: null
+      };
+      
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'drag-overlay file';
+      overlay.innerHTML = `
+        <div class="file-info">
+          <span class="file-index">${String(fileIndex + 1).padStart(2, '0')}</span>
+          <span class="file-name">${pdfFiles[fileIndex].name}</span>
+          <span class="file-meta">${pdfFiles[fileIndex].pages.length}${i18n[currentLang].pages}</span>
+        </div>
+      `;
+      overlay.style.width = rect.width + 'px';
+      overlay.style.left = rect.left + 'px';
+      overlay.style.top = rect.top + 'px';
+      document.body.appendChild(overlay);
+      
+      dragState.overlay = overlay;
+      element.classList.add('drag-ghost');
+      
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('mouseup', onDragEnd);
+    }
+
+    function startPageDrag(e, fileIndex, pageIndex, element) {
+      e.preventDefault();
+      
+      const rect = element.getBoundingClientRect();
+      const page = pdfFiles[fileIndex].pages[pageIndex];
+      
+      dragState = {
+        type: 'page',
+        sourceFileIndex: fileIndex,
+        sourcePageIndex: pageIndex,
+        startX: e.clientX,
+        startY: e.clientY,
+        offsetX: e.clientX - rect.left,
+        offsetY: e.clientY - rect.top,
+        element: element,
+        overlay: null
+      };
+      
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'drag-overlay page';
+      overlay.style.width = rect.width + 'px';
+      overlay.style.height = rect.height + 'px';
+      overlay.style.left = rect.left + 'px';
+      overlay.style.top = rect.top + 'px';
+      
+      if (page.thumbnail) {
+        const canvas = page.thumbnail.cloneNode();
+        canvas.getContext('2d').drawImage(page.thumbnail, 0, 0);
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        overlay.appendChild(canvas);
+      }
+      
+      document.body.appendChild(overlay);
+      
+      dragState.overlay = overlay;
+      element.classList.add('drag-ghost');
+      
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('mouseup', onDragEnd);
+    }
+
+    function onDragMove(e) {
+      if (!dragState.overlay) return;
+      
+      const x = e.clientX - dragState.offsetX;
+      const y = e.clientY - dragState.offsetY;
+      
+      dragState.overlay.style.left = x + 'px';
+      dragState.overlay.style.top = y + 'px';
+      
+      if (dragState.type === 'file') {
+        updateFileDropIndicator(e);
+      } else if (dragState.type === 'page') {
+        updatePageDropIndicator(e);
+      }
+    }
+
+    function updateFileDropIndicator(e) {
+      const fileGroups = document.querySelectorAll('.file-group');
+      let targetIndex = pdfFiles.length;
+      let indicatorY = 0;
+      let found = false;
+      
+      fileGroups.forEach((group, index) => {
+        if (index === dragState.sourceFileIndex) return;
+        
+        const rect = group.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        
+        if (e.clientY < midY && !found) {
+          targetIndex = index;
+          indicatorY = rect.top - 2;
+          found = true;
+        } else if (!found) {
+          targetIndex = index + 1;
+          indicatorY = rect.bottom + 2;
+        }
+      });
+      
+      // Adjust for source position
+      if (targetIndex > dragState.sourceFileIndex) {
+        targetIndex--;
+      }
+      
+      const listRect = filesList.getBoundingClientRect();
+      if (fileGroups.length === 0 || e.clientY > fileGroups[fileGroups.length - 1].getBoundingClientRect().bottom) {
+        const lastGroup = fileGroups[fileGroups.length - 1];
+        if (lastGroup) {
+          indicatorY = lastGroup.getBoundingClientRect().bottom + 2;
+        }
+      }
+      
+      fileDropIndicator.style.top = (indicatorY - listRect.top) + 'px';
+      fileDropIndicator.classList.add('visible');
+      
+      dragState.targetFileIndex = targetIndex;
+    }
+
+    function updatePageDropIndicator(e) {
+      // Find target grid
+      const grids = document.querySelectorAll('.pages-grid');
+      let targetGrid = null;
+      let targetFileIndex = null;
+      
+      grids.forEach(grid => {
+        const rect = grid.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          targetGrid = grid;
+          targetFileIndex = parseInt(grid.dataset.fileIndex);
+        }
+      });
+      
+      // Remove all existing page indicators
+      document.querySelectorAll('.page-drop-indicator').forEach(el => el.remove());
+      
+      if (!targetGrid) {
+        dragState.targetFileIndex = null;
+        dragState.targetPageIndex = null;
+        return;
+      }
+      
+      const thumbs = targetGrid.querySelectorAll('.page-thumb');
+      let targetIndex = pdfFiles[targetFileIndex].pages.length;
+      let indicatorX = 0;
+      let refThumb = null;
+      
+      thumbs.forEach((thumb, index) => {
+        const fi = parseInt(thumb.dataset.fileIndex);
+        const pi = parseInt(thumb.dataset.pageIndex);
+        
+        // Skip the dragged element
+        if (fi === dragState.sourceFileIndex && pi === dragState.sourcePageIndex) return;
+        
+        const rect = thumb.getBoundingClientRect();
+        const midX = rect.left + rect.width / 2;
+        
+        if (e.clientX < midX && targetIndex === pdfFiles[targetFileIndex].pages.length) {
+          targetIndex = index;
+          indicatorX = rect.left - 4;
+          refThumb = thumb;
+        }
+      });
+      
+      if (targetIndex === pdfFiles[targetFileIndex].pages.length && thumbs.length > 0) {
+        const lastThumb = thumbs[thumbs.length - 1];
+        indicatorX = lastThumb.getBoundingClientRect().right + 4;
+        refThumb = lastThumb;
+      }
+      
+      // Adjust for same file
+      if (targetFileIndex === dragState.sourceFileIndex && targetIndex > dragState.sourcePageIndex) {
+        targetIndex--;
+      }
+      
+      // Create indicator
+      if (refThumb) {
+        const indicator = document.createElement('div');
+        indicator.className = 'page-drop-indicator visible';
+        const gridRect = targetGrid.getBoundingClientRect();
+        indicator.style.left = (indicatorX - gridRect.left) + 'px';
+        indicator.style.top = '0';
+        indicator.style.bottom = '0';
+        targetGrid.appendChild(indicator);
+      }
+      
+      dragState.targetFileIndex = targetFileIndex;
+      dragState.targetPageIndex = targetIndex;
+    }
+
+    function onDragEnd(e) {
+      document.removeEventListener('mousemove', onDragMove);
+      document.removeEventListener('mouseup', onDragEnd);
+      
+      // Hide indicators
+      fileDropIndicator.classList.remove('visible');
+      document.querySelectorAll('.page-drop-indicator').forEach(el => el.remove());
+      
+      if (dragState.overlay) {
+        dragState.overlay.remove();
+      }
+      
+      if (dragState.element) {
+        dragState.element.classList.remove('drag-ghost');
+      }
+      
+      // Apply the move
+      if (dragState.type === 'file' && dragState.targetFileIndex !== undefined) {
+        moveFile(dragState.sourceFileIndex, dragState.targetFileIndex);
+      } else if (dragState.type === 'page' && dragState.targetFileIndex !== null && dragState.targetPageIndex !== null) {
+        movePage(
+          dragState.sourceFileIndex,
+          dragState.sourcePageIndex,
+          dragState.targetFileIndex,
+          dragState.targetPageIndex
+        );
+      }
+      
+      dragState = {
+        type: null,
+        sourceFileIndex: null,
+        sourcePageIndex: null,
+        overlay: null
+      };
+    }
+
+    function moveFile(fromIndex, toIndex) {
+      if (fromIndex === toIndex) return;
+      
+      const [moved] = pdfFiles.splice(fromIndex, 1);
+      pdfFiles.splice(toIndex, 0, moved);
+      
+      recalculateGlobalIndex();
+      renderFiles();
+    }
+
+    function movePage(fromFileIndex, fromPageIndex, toFileIndex, toPageIndex) {
+      if (fromFileIndex === toFileIndex && fromPageIndex === toPageIndex) return;
+      
+      const [movedPage] = pdfFiles[fromFileIndex].pages.splice(fromPageIndex, 1);
+      pdfFiles[toFileIndex].pages.splice(toPageIndex, 0, movedPage);
+      
+      // Remove empty files
+      if (pdfFiles[fromFileIndex].pages.length === 0) {
+        pdfFiles.splice(fromFileIndex, 1);
+      }
+      
+      recalculateGlobalIndex();
+      renderFiles();
+      updateUI();
+    }
+
+    async function generateThumbnails(file) {
+      for (const page of file.pages) {
+        if (!page.thumbnail) {
+          try {
+            const pdfPage = await file.pdfDoc.getPage(page.originalPageNum);
+            const viewport = pdfPage.getViewport({ scale: 0.2 });
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            await pdfPage.render({
+              canvasContext: canvas.getContext('2d'),
+              viewport
+            }).promise;
+            
+            page.thumbnail = canvas;
+          } catch (err) {
+            console.error('Thumbnail error:', err);
+          }
+        }
+      }
+    }
+
+    function recalculateGlobalIndex() {
+      let idx = 0;
+      pdfFiles.forEach(file => {
+        file.pages.forEach(page => {
+          idx++;
+          page.globalIndex = idx;
+        });
+      });
+      globalPageIndex = idx;
+    }
+
+    function updateUI() {
+      const hasFiles = pdfFiles.length > 0;
+      filesContainer.classList.toggle('has-files', hasFiles);
+      dropZone.classList.toggle('hidden', hasFiles);
+      dropZoneMini.classList.toggle('visible', hasFiles);
+      optionsEl.classList.toggle('visible', hasFiles);
+      actionsEl.classList.toggle('visible', hasFiles);
+      updateFilesCount();
+    }
+
+    document.querySelectorAll('.option-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const option = item.dataset.option;
+        options[option] = !options[option];
+        const checkbox = item.querySelector('.option-checkbox');
+        checkbox.classList.toggle('checked');
+        checkbox.textContent = options[option] ? '✓' : '';
+      });
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      pdfFiles = [];
+      globalPageIndex = 0;
+      renderFiles();
+      updateUI();
+    });
+
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      if (pdfFiles.length === 0) return;
+      
+      loadingEl.classList.add('visible');
+      actionsEl.classList.remove('visible');
+      
+      try {
+        const { PDFDocument } = PDFLib;
+        const mergedPdf = await PDFDocument.create();
+        
+        // Build a map of original file data
+        const fileDataMap = new Map();
+        pdfFiles.forEach(file => {
+          if (!fileDataMap.has(file.name)) {
+            fileDataMap.set(file.name, file.data);
+          }
+        });
+        
+        for (const file of pdfFiles) {
+          for (const page of file.pages) {
+            if (options.selected && !page.selected) continue;
+            
+            // Get the correct source document
+            const srcData = fileDataMap.get(page.originalFile) || file.data;
+            const srcDoc = await PDFDocument.load(srcData);
+            
+            const [copiedPage] = await mergedPdf.copyPages(srcDoc, [page.originalPageNum - 1]);
+            mergedPdf.addPage(copiedPage);
+          }
+        }
+        
+        const pdfBytes = await mergedPdf.save();
+        
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'output.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+        
+      } catch (err) {
+        console.error(err);
+        alert('Error processing PDF');
+      }
+      
+      loadingEl.classList.remove('visible');
+      actionsEl.classList.add('visible');
+    });
+
+    updateLanguage();
+  </script>
+</body>
+</html>
