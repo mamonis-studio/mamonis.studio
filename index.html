@@ -493,67 +493,107 @@
             transform: translateX(-0.5rem);
         }
 
-        /* Note Page */
-        .note-list {
-            max-width: 800px;
-            border-top: 1px solid var(--fg);
+        /* Patron Page */
+        .patron-form {
+            margin-top: 2rem;
         }
 
-        .note-item {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 2rem;
-            align-items: center;
-            padding: 1.5rem 1rem;
-            margin: 0 -1rem;
-            border-bottom: 1px solid var(--fg);
-            text-decoration: none;
-            color: var(--fg);
-            position: relative;
-            overflow: hidden;
-            transition: color 0.4s;
+        .patron-amount-group,
+        .patron-type-group {
+            margin-bottom: 2rem;
         }
 
-        .note-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .patron-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .patron-input {
             width: 100%;
-            height: 100%;
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            padding: 1rem;
+            background: transparent;
+            border: 1px solid var(--fg);
+            color: var(--fg);
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .patron-input:focus {
+            outline: none;
             background: var(--fg);
-            transform: translateX(-101%);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: -1;
-        }
-
-        .note-item:hover::before {
-            transform: translateX(0);
-        }
-
-        .note-item:hover {
             color: var(--bg);
         }
 
-        .note-date {
-            font-size: 0.75rem;
+        .patron-input::placeholder {
+            color: var(--fg);
+            opacity: 0.3;
+        }
+
+        .patron-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .patron-type-btn {
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 0.9rem;
             font-weight: 500;
+            letter-spacing: 0.05em;
+            padding: 1.25rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--fg);
+            color: var(--fg);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .patron-type-btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .patron-type-btn.active {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .patron-submit-btn {
+            width: 100%;
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
             letter-spacing: 0.1em;
-            opacity: 0.5;
+            text-transform: uppercase;
+            padding: 1.5rem 2rem;
+            background: var(--fg);
+            border: none;
+            color: var(--bg);
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 1rem;
         }
 
-        .note-item:hover .note-date {
-            opacity: 0.7;
+        .patron-submit-btn:hover {
+            transform: scale(1.02);
         }
 
-        .note-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .patron-submit-btn:active {
+            transform: scale(0.98);
         }
 
-        .note-item:hover .note-title {
-            transform: translateX(0.5rem);
+        .patron-note {
+            font-size: 0.75rem;
+            opacity: 0.4;
+            margin-top: 1rem;
+            text-align: center;
         }
 
         /* Lightbox */
@@ -696,6 +736,10 @@
             .masonry {
                 columns: 1;
             }
+
+            .patron-buttons {
+                grid-template-columns: 1fr;
+            }
         }
 
         ::selection {
@@ -722,7 +766,7 @@
     <nav class="nav">
         <a onclick="showPage('main-page', 'works')">Works</a>
         <a onclick="showPage('main-page', 'about')">About</a>
-        <a onclick="showPage('note-page')">Note</a>
+        <a onclick="showPage('patron-page')">Patron</a>
         <a onclick="showPage('contact-page')">Contact</a>
     </nav>
 
@@ -755,7 +799,7 @@
         <section class="section" id="about">
             <span class="section-label reveal">About</span>
             <p class="about-text reveal">
-                <strong>MAMONIS</strong>は、一人でも多くの笑顔のために創造（genesis）します。
+                <strong>MAMONIS</strong>は、一人でも多くの笑顔のために創造(genesis)します。
             </p>
         </section>
 
@@ -861,29 +905,44 @@
         </div>
     </div>
 
-    <!-- Note Page -->
-    <div id="note-page" class="page hidden gallery-page">
+    <!-- Patron Page -->
+    <div id="patron-page" class="page hidden gallery-page">
         <div class="gallery-header">
-            <h1 class="gallery-title">Note</h1>
+            <h1 class="gallery-title">Patron</h1>
             <button class="back-btn" onclick="showPage('main-page')">← Back</button>
         </div>
-        <div class="note-list">
-            <a href="#" class="note-item">
-                <span class="note-date">2025.01.04</span>
-                <span class="note-title">サンプル記事タイトル</span>
-            </a>
-            <a href="#" class="note-item">
-                <span class="note-date">2025.01.03</span>
-                <span class="note-title">サンプル記事タイトル</span>
-            </a>
-            <a href="#" class="note-item">
-                <span class="note-date">2025.01.02</span>
-                <span class="note-title">サンプル記事タイトル</span>
-            </a>
-            <a href="#" class="note-item">
-                <span class="note-date">2025.01.01</span>
-                <span class="note-title">サンプル記事タイトル</span>
-            </a>
+        <div class="contact-content">
+            <p class="contact-text">
+                創作活動を応援してくれる方、ありがとうございます。<br>
+                金額と支援タイプを選んで、Stripeで安全に支払いできます。
+            </p>
+            
+            <div class="patron-form">
+                <div class="patron-amount-group">
+                    <label class="patron-label">金額（円）</label>
+                    <input type="number" id="patron-amount" class="patron-input" placeholder="1000" min="100" step="100">
+                </div>
+                
+                <div class="patron-type-group">
+                    <label class="patron-label">支援タイプ</label>
+                    <div class="patron-buttons">
+                        <button class="patron-type-btn active" data-type="one-time" onclick="selectPatronType('one-time')">
+                            単発支援
+                        </button>
+                        <button class="patron-type-btn" data-type="monthly" onclick="selectPatronType('monthly')">
+                            毎月支援
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="patron-submit-btn" onclick="handlePatronSubmit()">
+                    Stripeで支払う
+                </button>
+                
+                <p class="patron-note">
+                    ※ Stripeの安全な決済ページに移動します
+                </p>
+            </div>
         </div>
     </div>
 
@@ -1015,7 +1074,51 @@
                 }
             });
         });
+
+        // Patron Page Functions
+        let selectedPatronType = 'one-time';
+
+        function selectPatronType(type) {
+            selectedPatronType = type;
+            document.querySelectorAll('.patron-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('active');
+        }
+
+        async function handlePatronSubmit() {
+            const amount = document.getElementById('patron-amount').value;
+            
+            if (!amount || amount < 100) {
+                alert('金額は100円以上を入力してください');
+                return;
+            }
+
+            // Stripeへリダイレクト
+            try {
+                const response = await fetch('https://patron-worker.YOUR_SUBDOMAIN.workers.dev/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: parseInt(amount),
+                        type: selectedPatronType
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('エラーが発生しました。もう一度お試しください。');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('エラーが発生しました。もう一度お試しください。');
+            }
+        }
     </script>
 </body>
 </html>
-          
