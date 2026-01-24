@@ -126,8 +126,6 @@
       color: #999;
     }
     
-    /* 白黒ミニマル - 特別な色なし */
-    
     .ranking-name {
       flex: 1;
       font-size: 11px;
@@ -222,23 +220,11 @@
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
-      margin-bottom: 16px;
     }
     
     .start-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-    
-    .shop-link {
-      font-size: 12px;
-      color: #888;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    
-    .shop-link:hover {
-      color: #1a1a1a;
     }
     
     /* Header */
@@ -597,22 +583,6 @@
       transform: translateX(-50%) translateY(-4px);
     }
     
-    .shop-btn-small {
-      font-size: 11px;
-      color: #888;
-      background: none;
-      border: 1px solid #ddd;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .shop-btn-small:hover {
-      border-color: #1a1a1a;
-      color: #1a1a1a;
-    }
-    
     /* Modals */
     .overlay {
       position: fixed;
@@ -712,7 +682,7 @@
       font-size: 20px;
     }
     
-    .retry-btn, .close-btn {
+    .retry-btn {
       padding: 14px 40px;
       font-size: 13px;
       font-weight: 500;
@@ -725,7 +695,7 @@
       transition: all 0.2s ease;
     }
     
-    .retry-btn:hover, .close-btn:hover {
+    .retry-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
@@ -808,93 +778,6 @@
       color: #1a1a1a;
     }
     
-    /* Shop */
-    .shop-section {
-      margin-bottom: 20px;
-    }
-    
-    .shop-section-title {
-      font-size: 10px;
-      color: #999;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-    
-    .shop-items {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .shop-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      background: #f8f8f8;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .shop-item:hover {
-      background: #f0f0f0;
-    }
-    
-    .shop-item-icon {
-      font-size: 20px;
-      width: 32px;
-    }
-    
-    .shop-item-info {
-      flex: 1;
-      text-align: left;
-      margin-left: 8px;
-    }
-    
-    .shop-item-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: #1a1a1a;
-    }
-    
-    .shop-item-desc {
-      font-size: 10px;
-      color: #999;
-    }
-    
-    .shop-item-price {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a1a1a;
-    }
-    
-    .shop-inventory {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 16px;
-      background: #f8f8f8;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .inventory-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .inventory-icon {
-      font-size: 18px;
-    }
-    
-    .inventory-count {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a1a1a;
-    }
-    
     .hidden { display: none !important; }
     
     @media (max-width: 640px) {
@@ -929,7 +812,6 @@
           <input type="text" class="name-input" id="playerNameInput" placeholder="Player" maxlength="12">
         </div>
         <button class="start-btn" onclick="startGame()">START</button>
-        <span class="shop-link" onclick="openShop()">SHOP</span>
       </div>
       
       <!-- Game Screen -->
@@ -979,7 +861,6 @@
             <span class="item-icon">⟳</span>
             <span class="item-count" id="shuffleCount">1</span>
           </button>
-          <button class="shop-btn-small" onclick="openShop()">SHOP</button>
         </div>
       </div>
       
@@ -1027,94 +908,9 @@
               </div>
               <span class="rescue-btn-count" id="rescueHoldCount">0</span>
             </button>
-            
-            <button class="rescue-btn" onclick="openShopFromRescue()">
-              <span class="rescue-btn-icon">🛒</span>
-              <div class="rescue-btn-info">
-                <div class="rescue-btn-name">SHOP</div>
-                <div class="rescue-btn-desc">アイテムを購入</div>
-              </div>
-              <span class="rescue-btn-count">→</span>
-            </button>
           </div>
           
           <button class="give-up-btn" onclick="confirmGameOver()">諦める...</button>
-        </div>
-      </div>
-      
-      <!-- Shop Modal -->
-      <div id="shopModal" class="overlay hidden">
-        <div class="modal">
-          <h2 class="modal-title">SHOP</h2>
-          
-          <div class="shop-inventory">
-            <div class="inventory-item">
-              <span class="inventory-icon">↩</span>
-              <span class="inventory-count" id="invUndo">0</span>
-            </div>
-            <div class="inventory-item">
-              <span class="inventory-icon">▽</span>
-              <span class="inventory-count" id="invHold">0</span>
-            </div>
-            <div class="inventory-item">
-              <span class="inventory-icon">⟳</span>
-              <span class="inventory-count" id="invShuffle">0</span>
-            </div>
-          </div>
-          
-          <div class="shop-section">
-            <div class="shop-section-title">SINGLE ITEMS</div>
-            <div class="shop-items">
-              <div class="shop-item" onclick="purchase('undo5')">
-                <span class="shop-item-icon">↩</span>
-                <div class="shop-item-info">
-                  <div class="shop-item-name">UNDO ×5</div>
-                  <div class="shop-item-desc">一手戻る</div>
-                </div>
-                <span class="shop-item-price">¥120</span>
-              </div>
-              <div class="shop-item" onclick="purchase('hold5')">
-                <span class="shop-item-icon">▽</span>
-                <div class="shop-item-info">
-                  <div class="shop-item-name">HOLD ×5</div>
-                  <div class="shop-item-desc">左3つを保留</div>
-                </div>
-                <span class="shop-item-price">¥120</span>
-              </div>
-              <div class="shop-item" onclick="purchase('shuffle5')">
-                <span class="shop-item-icon">⟳</span>
-                <div class="shop-item-info">
-                  <div class="shop-item-name">SHUFFLE ×5</div>
-                  <div class="shop-item-desc">盤面を並び替え</div>
-                </div>
-                <span class="shop-item-price">¥160</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="shop-section">
-            <div class="shop-section-title">PACKS</div>
-            <div class="shop-items">
-              <div class="shop-item" onclick="purchase('starter')">
-                <span class="shop-item-icon">📦</span>
-                <div class="shop-item-info">
-                  <div class="shop-item-name">Starter Pack</div>
-                  <div class="shop-item-desc">各アイテム ×3</div>
-                </div>
-                <span class="shop-item-price">¥250</span>
-              </div>
-              <div class="shop-item" onclick="purchase('value')">
-                <span class="shop-item-icon">🎁</span>
-                <div class="shop-item-info">
-                  <div class="shop-item-name">Value Pack</div>
-                  <div class="shop-item-desc">各アイテム ×10</div>
-                </div>
-                <span class="shop-item-price">¥800</span>
-              </div>
-            </div>
-          </div>
-          
-          <button class="close-btn" onclick="closeShop()">CLOSE</button>
         </div>
       </div>
     </div>
@@ -1127,19 +923,11 @@
   </div>
 
   <script>
-    const TILE_TYPES = ['●', '■', '▲', '◆', '★', '♦', '✦', '◎', '✿', '⬡'];
+    const TILE_TYPES = ['◉', '■', '▲', '◆', '★', '♦', '✦', '◎', '✿', '⬡'];
     const COLORS = [
       '#1a1a1a', '#4a4a4a', '#2d2d2d', '#6b6b6b', '#3d3d3d',
       '#5c5c5c', '#7a7a7a', '#8a8a8a', '#999999', '#ababab'
     ];
-    
-    const SHOP_ITEMS = {
-      undo5: { undo: 5, hold: 0, shuffle: 0, price: 120 },
-      hold5: { undo: 0, hold: 5, shuffle: 0, price: 120 },
-      shuffle5: { undo: 0, hold: 0, shuffle: 5, price: 160 },
-      starter: { undo: 3, hold: 3, shuffle: 3, price: 250 },
-      value: { undo: 10, hold: 10, shuffle: 10, price: 800 }
-    };
     
     let layers = [];
     let slot = [];
@@ -1150,27 +938,15 @@
     let lastMatch = null;
     let history = [];
     let items = { undo: 1, hold: 1, shuffle: 1 };
-    let inventory = { undo: 0, hold: 0, shuffle: 0 };
     let gameOver = false;
     let playerName = 'Player';
     let rankings = [];
     let currentPlayerRank = -1;
     let playerId = null;
     let isInRescueMode = false;
-    let shopOpenedFromRescue = false;
     
     // =============== STORAGE (API版) ===============
     const API_BASE = '/api';
-    
-    // ブラウザ固有のID（課金用）
-    function getVisitorId() {
-      let id = localStorage.getItem('digtile_visitor_id');
-      if (!id) {
-        id = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('digtile_visitor_id', id);
-      }
-      return id;
-    }
     
     async function loadRankings() {
       try {
@@ -1182,37 +958,6 @@
         rankings = [];
       }
       return rankings;
-    }
-    
-    async function saveRankings() {
-      // saveScoreで直接APIを叩くので、ここでは何もしない
-    }
-    
-    async function loadInventory() {
-      try {
-        const res = await fetch(`${API_BASE}/inventory?visitorId=${getVisitorId()}`);
-        const data = await res.json();
-        inventory = data.inventory || { undo: 0, hold: 0, shuffle: 0 };
-      } catch (e) {
-        console.error('Failed to load inventory:', e);
-        inventory = { undo: 0, hold: 0, shuffle: 0 };
-      }
-      return inventory;
-    }
-    
-    async function saveInventory() {
-      try {
-        await fetch(`${API_BASE}/inventory`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            visitorId: getVisitorId(),
-            inventory: inventory
-          })
-        });
-      } catch (e) {
-        console.error('Failed to save inventory:', e);
-      }
     }
     
     function updateLiveRanking() {
@@ -1250,60 +995,6 @@
       } catch (e) {
         console.error('Failed to save score:', e);
         return 1;
-      }
-    }
-    
-    // =============== SHOP ===============
-    function openShop() {
-      updateShopInventory();
-      document.getElementById('shopModal').classList.remove('hidden');
-    }
-    
-    function openShopFromRescue() {
-      shopOpenedFromRescue = true;
-      document.getElementById('rescueModal').classList.add('hidden');
-      openShop();
-    }
-    
-    function closeShop() {
-      document.getElementById('shopModal').classList.add('hidden');
-      
-      if (shopOpenedFromRescue) {
-        shopOpenedFromRescue = false;
-        // 購入後に在庫をゲームに追加
-        items.undo += inventory.undo;
-        items.hold += inventory.hold;
-        items.shuffle += inventory.shuffle;
-        inventory = { undo: 0, hold: 0, shuffle: 0 };
-        saveInventory();
-        
-        // 救済モーダルに戻る
-        showRescueModal();
-      }
-    }
-    
-    function updateShopInventory() {
-      document.getElementById('invUndo').textContent = inventory.undo;
-      document.getElementById('invHold').textContent = inventory.hold;
-      document.getElementById('invShuffle').textContent = inventory.shuffle;
-    }
-    
-    async function purchase(itemId) {
-      const item = SHOP_ITEMS[itemId];
-      if (!item) return;
-      
-      // TODO: Stripe決済連携（下のAPI説明参照）
-      const confirmed = confirm(`${item.price}円で購入しますか？\n\n（デモモード：実際の課金は発生しません）`);
-      
-      if (confirmed) {
-        inventory.undo += item.undo;
-        inventory.hold += item.hold;
-        inventory.shuffle += item.shuffle;
-        
-        await saveInventory();
-        updateShopInventory();
-        
-        alert('購入完了！');
       }
     }
     
@@ -1390,13 +1081,8 @@
       lastMatch = null;
       history = [];
       
-      items = { 
-        undo: 1 + inventory.undo, 
-        hold: 1 + inventory.hold, 
-        shuffle: 1 + inventory.shuffle 
-      };
-      inventory = { undo: 0, hold: 0, shuffle: 0 };
-      await saveInventory();
+      // 初期アイテムのみ
+      items = { undo: 1, hold: 1, shuffle: 1 };
       
       gameOver = false;
       isInRescueMode = false;
@@ -1406,7 +1092,6 @@
       document.getElementById('gameScreen').classList.remove('hidden');
       document.getElementById('gameOverModal').classList.add('hidden');
       document.getElementById('rescueModal').classList.add('hidden');
-      document.getElementById('shopModal').classList.add('hidden');
       
       await loadRankings();
       updateLiveRanking();
@@ -1809,9 +1494,7 @@
     // Init
     (async function init() {
       await loadRankings();
-      await loadInventory();
       renderRankingList();
-      updateShopInventory();
     })();
   </script>
 </body>
