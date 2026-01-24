@@ -310,6 +310,36 @@
         .work-item:hover .work-arrow {
             opacity: 1;
             transform: translateX(-0.5rem);
+
+        .work-desc {
+            grid-column: 2 / 3;
+            font-size: 0.85rem;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s, max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: -0.5rem;
+        }
+
+        .work-item:hover .work-desc {
+            opacity: 0.6;
+            max-height: 3rem;
+        }
+        }
+
+        .work-desc {
+            grid-column: 2 / 3;
+            font-size: 0.85rem;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s, max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: -0.5rem;
+        }
+
+        .work-item:hover .work-desc {
+            opacity: 0.6;
+            max-height: 3rem;
         }
 
         /* About */
@@ -719,6 +749,10 @@
                 display: none;
             }
 
+            .work-desc {
+                display: none;
+            }
+
             .section {
                 padding: 6rem 1.5rem;
             }
@@ -838,16 +872,25 @@
                 <span class="work-num">01</span>
                 <span class="work-title">QR</span>
                 <span class="work-arrow">→</span>
+                <span class="work-desc">QRコードを簡単に生成できるツール</span>
             </a>
             <a href="https://mamonis.studio/timer/" target="_blank" class="work-item">
                 <span class="work-num">02</span>
                 <span class="work-title">Timer</span>
                 <span class="work-arrow">→</span>
+                <span class="work-desc">シンプルで使いやすいタイマー</span>
             </a>
             <a href="https://mamonis.studio/digtile/" target="_blank" class="work-item">
                 <span class="work-num">03</span>
                 <span class="work-title">Digtile</span>
                 <span class="work-arrow">→</span>
+                <span class="work-desc">デジタルタイルパズルゲーム</span>
+            </a>
+            <a href="https://mamonis.studio/mamonis-pdf/" target="_blank" class="work-item">
+                <span class="work-num">04</span>
+                <span class="work-title">PDF</span>
+                <span class="work-arrow">→</span>
+                <span class="work-desc">PDFの結合・分割ツール</span>
             </a>
         </div>
     </div>
@@ -919,7 +962,7 @@
             
             <div class="patron-form">
                 <div class="patron-amount-group">
-                    <label class="patron-label">金額（円）</label>
+                    <label class="patron-label">金額(円)</label>
                     <input type="number" id="patron-amount" class="patron-input" placeholder="1000" min="100" step="100">
                 </div>
                 
