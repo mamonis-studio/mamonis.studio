@@ -311,21 +311,6 @@
         .work-item:hover .work-arrow {
             opacity: 1;
             transform: translateX(-0.5rem);
-
-        .work-desc {
-            grid-column: 3 / 4;
-            font-size: 0.85rem;
-            opacity: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            padding-right: 1rem;
-            text-align: right;
-        }
-
-        .work-item:hover .work-desc {
-            opacity: 0.6;
-        }
         }
 
         .work-desc {
@@ -524,6 +509,61 @@
             transform: translateX(-0.5rem);
         }
 
+        /* Price Section */
+        .price-section {
+            margin-top: 4rem;
+        }
+
+        .price-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-category {
+            margin-bottom: 3rem;
+        }
+
+        .price-category-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .price-list {
+            border-top: 1px solid var(--fg);
+            transition: border-color 0.8s;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--fg);
+            transition: border-color 0.8s;
+        }
+
+        .price-name {
+            font-size: 1rem;
+        }
+
+        .price-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 1rem;
+            line-height: 1.8;
+        }
+
         /* Patron Page */
         .patron-form {
             margin-top: 2rem;
@@ -627,6 +667,103 @@
             text-align: center;
         }
 
+        /* Blog Page */
+        .blog-list {
+            max-width: 800px;
+        }
+
+        .blog-item {
+            display: block;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--fg);
+            text-decoration: none;
+            color: var(--fg);
+            position: relative;
+            transition: color 0.4s, border-color 0.8s;
+        }
+
+        .blog-item:first-child {
+            border-top: 1px solid var(--fg);
+        }
+
+        .blog-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2rem;
+            right: -2rem;
+            bottom: 0;
+            background: var(--fg);
+            transform: translateX(-101%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+
+        .blog-item:hover::before {
+            transform: translateX(0);
+        }
+
+        .blog-item:hover {
+            color: var(--bg);
+        }
+
+        .blog-date {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            opacity: 0.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .blog-item:hover .blog-title {
+            transform: translateX(1rem);
+        }
+
+        .blog-excerpt {
+            font-size: 0.95rem;
+            opacity: 0.6;
+            line-height: 1.6;
+        }
+
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .blog-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid currentColor;
+            opacity: 0.5;
+        }
+
+        .blog-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            opacity: 0.5;
+        }
+
+        .blog-empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-empty-sub {
+            font-size: 0.85rem;
+        }
+
         /* Lightbox */
         .lightbox {
             position: fixed;
@@ -725,6 +862,9 @@
                 bottom: 2rem;
                 left: 50%;
                 transform: translateX(-50%);
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
             }
 
             .sun {
@@ -775,6 +915,12 @@
             .patron-buttons {
                 grid-template-columns: 1fr;
             }
+
+            .price-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
         }
 
         ::selection {
@@ -801,6 +947,7 @@
     <nav class="nav">
         <a onclick="showPage('main-page', 'works')">Works</a>
         <a onclick="showPage('main-page', 'about')">About</a>
+        <a onclick="showPage('blog-page')">Blog</a>
         <a onclick="showPage('patron-page')">Patron</a>
         <a onclick="showPage('contact-page')">Contact</a>
     </nav>
@@ -834,7 +981,7 @@
         <section class="section" id="about">
             <span class="section-label reveal">About</span>
             <p class="about-text reveal">
-                <strong>MAMONIS</strong>は、一人でも多くの笑顔のために創造(genesis)します。
+                <strong>MAMONIS</strong>は、一人でも多くの笑顔のために創造 (genesis)します。
             </p>
         </section>
 
@@ -896,56 +1043,30 @@
         </div>
     </div>
 
-    <!-- Photo Gallery Page -->
-    <div id="photo-page" class="page hidden gallery-page">
+    <!-- Blog Page -->
+    <div id="blog-page" class="page hidden gallery-page">
         <div class="gallery-header">
-            <h1 class="gallery-title">Photo</h1>
+            <h1 class="gallery-title">Blog</h1>
             <button class="back-btn" onclick="showPage('main-page')">← Back</button>
         </div>
-        <div class="masonry" id="photo-gallery">
-            <div class="masonry-item" onclick="openLightbox('photo', 0)"><div class="placeholder" style="height: 350px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 1)"><div class="placeholder" style="height: 240px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 2)"><div class="placeholder" style="height: 280px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 3)"><div class="placeholder" style="height: 320px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 4)"><div class="placeholder" style="height: 200px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 5)"><div class="placeholder" style="height: 380px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 6)"><div class="placeholder" style="height: 260px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 7)"><div class="placeholder" style="height: 300px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('photo', 8)"><div class="placeholder" style="height: 220px;"></div></div>
-        </div>
-    </div>
-
-    <!-- Video Gallery Page -->
-    <div id="video-page" class="page hidden gallery-page">
-        <div class="gallery-header">
-            <h1 class="gallery-title">Video</h1>
-            <button class="back-btn" onclick="showPage('main-page')">← Back</button>
-        </div>
-        <div class="masonry" id="video-gallery">
-            <div class="masonry-item" onclick="openLightbox('video', 0)"><div class="placeholder" style="height: 200px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('video', 1)"><div class="placeholder" style="height: 200px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('video', 2)"><div class="placeholder" style="height: 200px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('video', 3)"><div class="placeholder" style="height: 200px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('video', 4)"><div class="placeholder" style="height: 200px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('video', 5)"><div class="placeholder" style="height: 200px;"></div></div>
-        </div>
-    </div>
-
-    <!-- Music Gallery Page -->
-    <div id="music-page" class="page hidden gallery-page">
-        <div class="gallery-header">
-            <h1 class="gallery-title">Music</h1>
-            <button class="back-btn" onclick="showPage('main-page')">← Back</button>
-        </div>
-        <div class="masonry" id="music-gallery">
-            <div class="masonry-item" onclick="openLightbox('music', 0)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 1)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 2)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 3)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 4)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 5)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 6)"><div class="placeholder" style="height: 250px;"></div></div>
-            <div class="masonry-item" onclick="openLightbox('music', 7)"><div class="placeholder" style="height: 250px;"></div></div>
+        <div class="blog-list">
+            <!-- 記事がない場合の表示 -->
+            <div class="blog-empty">
+                <p class="blog-empty-text">Coming Soon</p>
+                <p class="blog-empty-sub">技術記事・制作実績を公開予定</p>
+            </div>
+            
+            <!-- 記事追加時のテンプレート（コメントアウト）
+            <a href="/blog/article-slug/" class="blog-item">
+                <div class="blog-date">2026.01.24</div>
+                <h2 class="blog-title">記事タイトル</h2>
+                <p class="blog-excerpt">記事の概要がここに入る。2〜3行程度で収まるように。</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">開発</span>
+                    <span class="blog-tag">Cloudflare</span>
+                </div>
+            </a>
+            -->
         </div>
     </div>
 
@@ -996,12 +1117,73 @@
             <h1 class="gallery-title">Contact</h1>
             <button class="back-btn" onclick="showPage('main-page')">← Back</button>
         </div>
-        <div class="works-list">
-            <a href="/cdn-cgi/l/email-protection#e98a86879d888a9da98488848687809ac79a9d9c8d8086" class="work-item">
-                <span class="work-num">01</span>
-                <span class="work-title">Email</span>
-                <span class="work-arrow">→</span>
-            </a>
+        <div class="contact-content">
+            <p class="contact-text">
+                お仕事のご依頼・ご相談はメールにてお気軽にどうぞ。
+            </p>
+            
+            <div class="works-list">
+                <a href="mailto:mamonis@mamonis.studio" class="work-item">
+                    <span class="work-num">01</span>
+                    <span class="work-title">Email</span>
+                    <span class="work-arrow">→</span>
+                </a>
+            </div>
+
+            <!-- 料金表 -->
+            <div class="price-section">
+                <h3 class="price-section-title">参考価格</h3>
+                
+                <div class="price-category">
+                    <h4 class="price-category-title">Web開発</h4>
+                    <div class="price-list">
+                        <div class="price-item">
+                            <span class="price-name">LP（ランディングページ）</span>
+                            <span class="price-value">50,000円〜</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-name">コーポレートサイト</span>
+                            <span class="price-value">100,000円〜</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-name">Webアプリ開発</span>
+                            <span class="price-value">150,000円〜</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-name">管理画面・CMS構築</span>
+                            <span class="price-value">200,000円〜</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-name">保守・運用</span>
+                            <span class="price-value">10,000円〜/月</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-category">
+                    <h4 class="price-category-title">写真・動画撮影</h4>
+                    <div class="price-list">
+                        <div class="price-item">
+                            <span class="price-name">写真撮影（イベント・商品など）</span>
+                            <span class="price-value">30,000円〜</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-name">動画撮影・編集</span>
+                            <span class="price-value">50,000円〜</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-name">プロモーション映像</span>
+                            <span class="price-value">100,000円〜</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="price-note">
+                    ※ 上記は参考価格です。ページ数・機能・撮影内容により変動します。<br>
+                    ※ 正式なお見積もりはヒアリング後にご提示いたします。<br>
+                    ※ お気軽にご相談ください。
+                </p>
+            </div>
         </div>
     </div>
 
@@ -1015,7 +1197,7 @@
         <button class="lightbox-nav lightbox-next" onclick="nextLightbox()">→</button>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // Theme Toggle
         function toggleTheme() {
             const body = document.body;
